@@ -26,31 +26,34 @@ class MultinomialNB(NativeBayes):
         print(dic)
         print(label)               
     def predict(self,lb,x,label,dic,jieguo):
-        probility=0
-        result=0
+        probility=1
+        result=0.0
         predictlabel=""
         ratio=0
+        allsum=0
+        for key in label:
+            allsum+=label[key]
         for i in range(len(x)):
            result=0 
            for key in label:
                num=label[key]
                for j in range(0,len(x[0])-1):
                    if dic[key][j].__contains__(x[i][j]):
-                      probility+=(dic[key][j][x[i][j]]+lb)/(num+lb*len(label))
+                      probility*=((dic[key][j][x[i][j]]+lb)/(num+lb*len(label)))
                    else:
-                      probility+=(0+lb)/(num+lb*len(label))       
+                      probility*=((0+lb)/(num+lb*len(label)))
+               probility*=(num/allsum)       
                if probility>result:
                    result=probility
                    predictlabel=key     
-                   
-               probility=0    
+               probility=1    
            if(predictlabel==x[i][-1]):
                ratio+=1
            jieguo.append(predictlabel)
         print("Acc: {:12.6} %".format(100*ratio/len(x)))
 if __name__=='__main__':
         x=[]
-        with open("_Data/cut-mushroom.txt","r",encoding="utf8") as file:
+        with open("_Data/mushroom.txt","r",encoding="utf8") as file:
             for sample in file:
                 print(sample)
                 x.append(sample.strip().split(","))
