@@ -4,7 +4,8 @@ Created on Sat Nov 17 10:28:41 2018
 
 @author: 704423953
 """
-
+import matplotlib.pyplot as plt
+import numpy as np
 from NaiveBayes import NativeBayes
 class MultinomialNB(NativeBayes):
     def feed_data(self,dic,label,x):
@@ -24,7 +25,7 @@ class MultinomialNB(NativeBayes):
                        dic[x[i][-1]]={j:{x[i][j]:1}}
                        label[x[i][-1]]=1
         print(dic)
-        print(label)               
+        print(label)   
     def predict(self,lb,x,label,dic,jieguo):
         probility=1
         result=0.0
@@ -65,8 +66,20 @@ if __name__=='__main__':
         list1=[]
         nb.feed_data(dic,label,x)
         nb.predict(1,x,label,dic,list1)
-        
-
+colors={"e":"lightSkyBlue","p":"orange"}
+for i in range(len(dic["p"])-10):
+     plt.figure()
+     m=0
+     for key in label:
+        s=[]
+        index =np.arange(1,len(dic[key][i])+1)
+        print(index)
+        for values in dic[key][i].values():
+            s.append(values/label[key])   
+        print(s)    
+        plt.bar(index+m,s,width=0.35,facecolor=colors[key],edgecolor="white",label="class: {}".format(key),tick_label=list(dic[key][i].keys()))
+        m+=0.35
+     plt.ylim(0,1.0)     
 
 
 
